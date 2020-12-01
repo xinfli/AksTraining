@@ -139,12 +139,43 @@ az acr repository list -n $acrName -o table
 ## Deployment
 
 ```powershell
-$aksClusterResourceGroup = 'xlakseuwe01'
-$aksClusterName = 'xlakseuwe01'
+$subscriptionid = "ee6c4145-f2fc-4366-bca4-1a38775414f3"
+$aksClusterResourceGroup = "xlakseuwe01"
+$aksClusterName = "xlakseuwe01"
+$acrName = "xlcr01"
+
+# Login
+az account set --subscription $subscriptionid
+az account show
+az acr login --name $acrName
 
 # Getting credentials from AKS into the kubectl environment.
 az aks get-credentials --resource-group $aksClusterResourceGroup --name $aksClusterName
+
 kubectl config get-contexts
+kubectl apply -f .\\deploy-frontend.yaml
+kubectl get pods -o wide
+kubectl proxy 
+kubectl get pods
+kubectl apply -f .\\deploy-frontend.yaml
+
+kubectl get nodes
+az aks nodepool add `
+   --resource-group $aksClusterResourceGroup `
+   --cluster-name $aksClusterName `
+   --name nodepool1 `
+   --labels service=backend
+
+az aks nodepool list `
+   --resource-group $aksClusterResourceGroup `
+   --cluster-name $aksClusterName
+
+kubectl get nodes
+kubectl label node aks-nodepool1-28427571-vmss000000 service=backend
+kubectl show label
+
+kubectl describe node aks-nodepool1-28427571-vmss000000
+kubectl apply -f .\\deploy-backend.yaml
+az aks enable-addons --resource-group $aksClusterResourceGroup --name $aksClusterName -a kube-dashboard
 
 ```
-
