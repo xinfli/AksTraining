@@ -18,6 +18,6 @@ setup devops for audo deployment to AKS
 
 setup version of the code and update based on version
 
-setup build pipe for our code
+(DONE)setup build pipe for our code
 
 setup build pipe with yaml with our code
