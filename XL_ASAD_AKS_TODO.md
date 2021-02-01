@@ -10,10 +10,14 @@ What are the different type of services
 
 Setup Cname 
 
-Setup name-space and deploy into a name-sapace
+(DONE)Setup name-space and deploy into a name-sapace
 
 Setup devops for the auto build on every push
 
 setup devops for audo deployment to AKS
 
 setup version of the code and update based on version
+
+setup build pipe for our code
+
+setup build pipe with yaml with our code
