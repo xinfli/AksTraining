@@ -52,6 +52,8 @@ az acr list --output table
 # Create the service principle
 $svcPrinciple = (az ad sp create-for-rbac --skip-assignment | ConvertFrom-Json)
 
+Write-Host $svcPrinciple
+
 $acrId = az acr show `
    --name $acrName `
    --resource-group $aksClusterResourceGroup `
@@ -136,13 +138,13 @@ docker push xlacr01.azurecr.io/xfdemo/akstestfrontend:v1
 az acr repository list -n $acrName -o table
 ```
 
-## Deployment
+## Add node pool
 
 ```powershell
 $subscriptionid = "ee6c4145-f2fc-4366-bca4-1a38775414f3"
 $aksClusterResourceGroup = "xlakseuwe01"
 $aksClusterName = "xlakseuwe01"
-$acrName = "xlcr01"
+$acrName = "xlacr01"
 
 # Login
 az account set --subscription $subscriptionid

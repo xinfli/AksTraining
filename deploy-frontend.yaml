@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: frontend
   labels:
-    app: akstest-backend
+    app: akstest-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: backend
+      service: frontend
   template:
     metadata:
       labels:
-        app: akstest-backend
-        service: backend
+        app: akstest-frontend
+        service: frontend
     spec:
       containers:
-        - name: backend
-          image: xlacr01.azurecr.io/xfdemo/akstestbackend:v1
+        - name: frontend
+          image: xlacr01.azurecr.io/xfdemo/akstestfrontend:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
@@ -25,16 +25,14 @@ spec:
           env:
             - name: ASPNETCORE_URLS
               value: http://+:80
-            - name: Options__FrontendApiEndpoint
-              value: http://10.244.0.17/api/Message/SendMessage
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: frontend
   labels:
-    app: akstest-backend
-    service: backend
+    app: akstest-frontend
+    service: frontend
 spec:
   type: LoadBalancer
   ports:
@@ -42,4 +40,4 @@ spec:
       targetPort: 80
       protocol: TCP
   selector:
-    service: backend
+    service: frontend
