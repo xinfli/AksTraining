@@ -155,11 +155,23 @@ az acr login --name $acrName
 az aks get-credentials --resource-group $aksClusterResourceGroup --name $aksClusterName
 
 kubectl config get-contexts
-kubectl apply -f .\\deploy-frontend.yaml
+
+# Create namespace
+kubectl create -f .\\namespace.yaml
+kubectl get namespace
+kubectl get services
+
+# Deploy frontend and backend application
+kubectl apply -f .\\deploy-frontend.yaml --namespace=aksdemo
+# Question: How to get frontend node IP address and apply it to backend?
+kubectl apply -f .\\deploy-backend.yaml --namespace=aksdemo
+
 kubectl get pods -o wide
-kubectl proxy 
-kubectl get pods
-kubectl apply -f .\\deploy-frontend.yaml
+kubectl proxy
+kubectl get pods -n aksdemo
+
+kubectl get deployments
+kubectl get deployments -n aksdemo
 
 kubectl get nodes
 az aks nodepool add `
