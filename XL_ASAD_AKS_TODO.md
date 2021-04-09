@@ -21,3 +21,5 @@ setup version of the code and update based on version
 (DONE)setup build pipe for our code
 
 setup build pipe with yaml with our code
+
+install a cluster with another networking service other than Kubenet
