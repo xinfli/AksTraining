@@ -4,11 +4,11 @@
 **Note:** Should run commands in a Azure cloud PowerShell
 ```powershell
 $subscriptionid = 'ee6c4145-f2fc-4366-bca4-1a38775414f3'
-$aksClusterName = 'xlakseuwe01'
-$aksClusterResourceGroup = 'xlakseuwe01'
+$aksClusterName = 'xfakseuwe01'
+$aksClusterResourceGroup = 'xfakseuwe01'
 $nodeCount = '1'
 $resourceGroupLocation = 'westeurope'
-$acrName = 'xlacr01'
+$acrName = 'xfacr01'
 $sku = 'basic'
 
 az login
@@ -24,16 +24,22 @@ az group create `
    --location $resourceGroupLocation `
    --name $aksClusterResourceGroup
 
+# Create the service principle
+$svcPrincipleName = $aksClusterName + 'SvcPrinciple'
+$svcPrinciple = (az ad sp create-for-rbac --skip-assignment  --name $svcPrincipleName | ConvertFrom-Json)
+Write-Host $svcPrinciple
+
 # Create AKS
 az aks create `
    --name $aksClusterName `
    --resource-group $aksClusterResourceGroup `
    --node-count $nodeCount `
-   --generate-ssh-keys
+   --service-principal $svcPrinciple.appId `
+   --client-secret  $svcPrinciple.password
+   # --generate-ssh-keys `
 ```
 
 ## Creating a azure container registry
-**Note:** Should run commands in a Azure cloud PowerShell
 ```powershell
 # Create ACR
 az acr create `
@@ -44,15 +50,6 @@ az acr create `
 
 # Confirm ACR created
 az acr list --output table
-```
-
-## Adding service principle and assign it to AKS
-**Note:** Should run commands in a Azure cloud PowerShell
-```powershell
-# Create the service principle
-$svcPrinciple = (az ad sp create-for-rbac --skip-assignment | ConvertFrom-Json)
-
-Write-Host $svcPrinciple
 
 $acrId = az acr show `
    --name $acrName `
@@ -76,7 +73,6 @@ az aks list --resource-group $aksClusterResourceGroup
 ```
 
 ## Create docker image and run it locally
-**Note:** Should run commands in a local PowerShell
 ```powershell
 docker images
 
@@ -110,7 +106,7 @@ docker run -p 8082:80 `
 ## Push image to acr
 **Note:** Should run commands in a local PowerShell
 ```powershell
-$acrName = 'xlacr01'
+$acrName = 'xfacr01'
 
 # Its a cli on the docker login command
 az acr login --name $acrName
@@ -124,16 +120,16 @@ az acr repository list --name $acrName
 # Show all local images
 docker image list
 # Tag image
-docker tag xinfli/akstestbackend:dev xlacr01.azurecr.io/xfdemo/akstestbackend:v1
+docker tag xinfli/akstestbackend:dev xfacr01.azurecr.io/xfdemo/akstestbackend:v1
 # Show updated local images
 docker image list
 # Push image to new created acr
-docker push xlacr01.azurecr.io/xfdemo/akstestbackend:v1
+docker push xfacr01.azurecr.io/xfdemo/akstestbackend:v1
 
 docker image list
-docker tag xinfli/akstestfrontend:dev xlacr01.azurecr.io/xfdemo/akstestfrontend:v1
+docker tag xinfli/akstestfrontend:dev xfacr01.azurecr.io/xfdemo/akstestfrontend:v1
 docker image list
-docker push xlacr01.azurecr.io/xfdemo/akstestfrontend:v1
+docker push xfacr01.azurecr.io/xfdemo/akstestfrontend:v1
 
 az acr repository list -n $acrName -o table
 ```
@@ -142,9 +138,9 @@ az acr repository list -n $acrName -o table
 
 ```powershell
 $subscriptionid = "ee6c4145-f2fc-4366-bca4-1a38775414f3"
-$aksClusterResourceGroup = "xlakseuwe01"
-$aksClusterName = "xlakseuwe01"
-$acrName = "xlacr01"
+$aksClusterResourceGroup = "xfakseuwe01"
+$aksClusterName = "xfakseuwe01"
+$acrName = "xfacr01"
 
 # Login
 az account set --subscription $subscriptionid
