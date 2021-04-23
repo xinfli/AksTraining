@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Network Information";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <div>
+        <strong>HostName:</strong><span>@Model.HostName</span>
+    </div>
+    <div>
+        <strong>DomainName:</strong><span>@Model.DomainName</span>
+    </div>
+    <div>
+        <strong>DefaultGateway:</strong><span>@Model.DefaultGateway</span>
+    </div>
+    <div>
+        <strong>NodeType:</strong><span>@Model.NodeType</span>
+    </div>
+    <hr />
+    <div>
+        <div><strong>Total @Model.NetworkInterfaces.Count network interfaces:</strong></div>
+        <div>
+            @foreach (var networkInterface in @Model.NetworkInterfaces)
+            {
+                <hr />
+                <div><strong>  - Description:</strong><span>@networkInterface.Description</span></div>
+                <div><strong>  - Type:</strong><span>@networkInterface.Type</span></div>
+                <div><strong>  - PhysicalAddress:</strong><span>@networkInterface.PhysicalAddress</span></div>
+            }
+        </div>
+    </div>
+</div>

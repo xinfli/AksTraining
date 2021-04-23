@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h2>Messages</h2>
+    <table class="text-center">
+        <tbody>
+            <tr>
+                <th>Send Time</th>
+                <th>Content</th>
+                <th>IP Routes</th>
+            </tr>
+            @foreach (var message in Model)
+            {
+            <tr>
+                <td>@Html.Raw(message.SendTime) </td>
+                <td>@Html.Raw(message.Content) </td>
+                <td>
+                    <div>
+                        @foreach (var ipRoute in message.IpRoutes)
+                        {
+                        <div>@Html.Raw(ipRoute)</div>
+                        }
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
