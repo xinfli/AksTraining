@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: xlacr01.azurecr.io/xfdemo/akstestfrontend:v1
+          image: xfacr01.azurecr.io/xfdemo/akstestfrontend:v2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

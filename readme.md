@@ -1,4 +1,5 @@
-# AKS Test Deployment
+# AKS Learning
+This repository contains a demo application and scripts about how to deploy it to Azure Kubernetes cluster.
 
 ## Install a Aks cluster
 **Note:** Should run commands in a Azure cloud PowerShell
@@ -120,16 +121,16 @@ az acr repository list --name $acrName
 # Show all local images
 docker image list
 # Tag image
-docker tag xinfli/akstestbackend:dev xfacr01.azurecr.io/xfdemo/akstestbackend:v1
+docker tag xinfli/akstestbackend:dev xfacr01.azurecr.io/xfdemo/akstestbackend:v2
 # Show updated local images
 docker image list
 # Push image to new created acr
-docker push xfacr01.azurecr.io/xfdemo/akstestbackend:v1
+docker push xfacr01.azurecr.io/xfdemo/akstestbackend:v2
 
 docker image list
-docker tag xinfli/akstestfrontend:dev xfacr01.azurecr.io/xfdemo/akstestfrontend:v1
+docker tag xinfli/akstestfrontend:dev xfacr01.azurecr.io/xfdemo/akstestfrontend:v2
 docker image list
-docker push xfacr01.azurecr.io/xfdemo/akstestfrontend:v1
+docker push xfacr01.azurecr.io/xfdemo/akstestfrontend:v2
 
 az acr repository list -n $acrName -o table
 ```
@@ -153,14 +154,14 @@ az aks get-credentials --resource-group $aksClusterResourceGroup --name $aksClus
 kubectl config get-contexts
 
 # Create namespace
-kubectl create -f .\\namespace.yaml
+kubectl create -f .\deployToAks\aks-namespace.yaml
 kubectl get namespace
 kubectl get services
 
 # Deploy frontend and backend application
-kubectl apply -f .\\deploy-frontend.yaml --namespace=aksdemo
 # Question: How to get frontend node IP address and apply it to backend?
-kubectl apply -f .\\deploy-backend.yaml --namespace=aksdemo
+kubectl apply -f .\deployToAks\deploy-backend.yaml --namespace=aksdemo
+kubectl apply -f .\deployToAks\deploy-frontend.yaml --namespace=aksdemo
 
 kubectl get pods -o wide
 kubectl proxy
@@ -181,11 +182,11 @@ az aks nodepool list `
    --cluster-name $aksClusterName
 
 kubectl get nodes
-kubectl label node aks-nodepool1-28427571-vmss000000 service=backend
-kubectl show label
+kubectl label node <Get node name from previous step> service=backend
+#kubectl show label
 
-kubectl describe node aks-nodepool1-28427571-vmss000000
-kubectl apply -f .\\deploy-backend.yaml
+kubectl describe node <Get node name from previous step>
+kubectl apply -f .\deployToAks\deploy-backend.yaml
 az aks enable-addons --resource-group $aksClusterResourceGroup --name $aksClusterName -a kube-dashboard
 
 ```
