@@ -24,7 +24,7 @@ setup build pipe with yaml with our code
 
 install a cluster with another networking service other than Kubenet
 
-install k8s cluster using ARM 
+(DONE)install k8s cluster using ARM 
 
 k8s verticle and horizontal scaling
 

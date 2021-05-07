@@ -208,3 +208,83 @@ az aks enable-addons --resource-group $aksClusterResourceGroup --name $aksCluste
 
 ```
 
+## Vertical auto Scaling 
+
+```powershell
+#Verticle scaling will add more nodes to the cluster
+kubectl get nodes
+
+#adding nodes this may take some time
+az aks update --resource-group xfakseuwe01 --name xfakseuwe01  --enable-cluster-autoscaler --min-count 2 --max-count 5
+```
+
+
+
+## Deploying Nginx test application
+
+```powershell
+cd ..\AksTraining\k8s-general\
+
+#applying the deployment file
+kubectl apply -f nginx.yaml
+
+kubectl get deployments
+
+kubectl get deployments nginx-deployment
+
+kubectl get pods
+
+$SERVICEIP=(kubectl get service nginx -o jsonpath='{ .status.loadBalancer.ingress[0].ip }')
+
+#see the service in the browser
+Start-Process http://$SERVICEIP
+
+kubectl get pods -o wide
+```
+
+
+
+## Horizontal auto Scaling
+
+```powershell
+kubectl get deployments nginx-deployment
+
+#auto scale the pods
+kubectl autoscale deployment nginx-deployment --cpu-percent=50 --min=2 --max=5
+
+#this may take sometime to appear
+kubectl get pods
+```
+
+
+
+## Manually upgrading clusters
+
+```powershell
+# Manually upgrade our cluster
+
+$RG= "xfakseuwe01"
+
+$aksName= "xfakseuwe01"
+
+$Region= "westeurope"
+
+az aks show -n $aksName -g $RG -o table
+
+az aks get-versions -l $Region -o table
+
+az aks get-upgrades -n $aksName -g $RG -o table
+
+kubectl get nodes
+
+#this will only upgrade the control place
+az aks upgrade -n $aksName -g $RG --kubernetes-version 1.18.17 --control-plane-only
+
+#this will update all the nodes
+az aks upgrade -n $aksName -g $RG --kubernetes-version 1.18.17
+
+kubectl get nodes
+
+az aks get-upgrades -n $aksName -g $RG -o table
+```
+
