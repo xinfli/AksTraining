@@ -26,6 +26,6 @@ install a cluster with another networking service other than Kubenet
 
 (DONE)install k8s cluster using ARM 
 
-k8s verticle and horizontal scaling
+(DONE)k8s verticle and horizontal scaling
 
-upgrading aks clusters control plane
+(PARTIAL-DONE)upgrading aks clusters control plane
