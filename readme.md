@@ -40,7 +40,24 @@ az aks create `
    # --generate-ssh-keys `
 ```
 
+## Creating Cluster using ARM template (Syntax only)
+
+```powershell
+#install bicep to view the ARM template in simple language
+az bicep install
+
+az group create --name asadaks --location westeurope
+
+az Deployment group create -f template.json -g asadaks --parameters managedClusters_xfakseuwe01_name=asadaks
+
+#just to show the bicep code file
+az bicep decompile --file template.json
+```
+
+
+
 ## Creating a azure container registry
+
 ```powershell
 # Create ACR
 az acr create `
@@ -190,3 +207,4 @@ kubectl apply -f .\deployToAks\deploy-backend.yaml
 az aks enable-addons --resource-group $aksClusterResourceGroup --name $aksClusterName -a kube-dashboard
 
 ```
+

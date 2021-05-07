@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedClusters_xfakseuwe01_name": {
+            "value": null
+        },
+        "publicIPAddresses_81b62c03_a126_4765_a382_c4905aecb1a3_externalid": {
+            "value": null
+        }
+    }
+}
